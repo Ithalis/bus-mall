@@ -3,66 +3,87 @@
 var imageInfo = [
   {
     filepath: 'img/banana.jpg',
-    name: 'banana'},
+    name: 'banana'
+  },
   {
     filepath: 'img/bag.jpg',
-    name: 'bag'},
+    name: 'bag'
+  },
   {
     filepath: 'img/bathroom.jpg',
-    name: 'bathroom'},
+    name: 'bathroom'
+  },
   {
     filepath: 'img/boots.jpg',
-    name: 'boots'},
+    name: 'boots'
+  },
   {
     filepath: 'img/breakfast.jpg',
-    name: 'breakfast'},
+    name: 'breakfast'
+  },
   {
     filepath: 'img/bubblegum.jpg',
-    name: 'chair'},
+    name: 'chair'
+  },
   {
     filepath: 'img/chair.jpg',
-    name: 'chair'},
+    name: 'chair'
+  },
   {
     filepath: 'img/cthulhu.jpg',
-    name: 'cthulhu'},
+    name: 'cthulhu'
+  },
   {
     filepath: 'img/dogDuck.jpg',
-    name: 'dogDuck'},
+    name: 'dogDuck'
+  },
   {
     filepath: 'img/dragon.jpg',
-    name: 'dragon'},
+    name: 'dragon'
+  },
   {
     filepath: 'img/pen.jpg',
-    name: 'pen'},
+    name: 'pen'
+  },
   {
     filepath: 'img/petSweep.jpg',
-    name: 'petSweep'},
+    name: 'petSweep'
+  },
   {
     filepath: 'img/scissors.jpg',
-    name: 'scissors'},
+    name: 'scissors'
+  },
   {
     filepath: 'img/shark.jpg',
-    name: 'shark'},
+    name: 'shark'
+  },
   {
     filepath: 'img/sweep.png',
-    name: 'sweep'},
+    name: 'sweep'
+  },
   {
     filepath: 'img/tauntaun.jpg',
-    name: 'tauntaun'},
+    name: 'tauntaun'
+  },
   {
     filepath: 'img/unicorn.jpg',
-    name: 'unicorn'},
+    name: 'unicorn'
+  },
   {
     filepath: 'img/usb.gif',
-    name: 'usb'},
+    name: 'usb'
+  },
   {
     filepath: 'img/waterCan.jpg',
-    name: 'waterCan'},
+    name: 'waterCan'
+  },
   {
     filepath: 'img/wineGlass.jpg',
     name: 'wineGlass'}
 ];
 var allUserChoices = [];
+var randomNumbers = [];
+var lastRandomNumbers = [];
 
 function UserChoice(imageName, imagePath, numberOfAppearances, numberOfClicks){
   this.imageName = imageName;
@@ -77,5 +98,22 @@ function makeUserChoices(){
     allUserChoices.push(imageInfo[i]);
   }
 };
+
+function getRandomNumber(){
+  var ranNumb = Math.floor(Math.random() * allUserChoices.length);
+  return ranNumb;
+};
+
+function pickThreeUserChoices(){
+  lastRandomNumbers = randomNumbers;
+  randomNumbers = [];
+  while (randomNumbers.length < 3) {
+    var currentRandomNumb = getRandomNumber();
+    if (randomNumbers.indexOf(currentRandomNumb) === -1 && lastRandomNumbers.indexOf(currentRandomNumb) === -1) {
+      randomNumbers.push(currentRandomNumb);
+    }
+  }
+  console.log(randomNumbers);
+}
 
 makeUserChoices();
