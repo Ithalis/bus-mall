@@ -150,7 +150,12 @@ function eventCall(event){
     addChoicesToElement();
   } else {
     console.log('You\'ve reached 25 choices! You are awesome!');
-
+    alert('You\'re done! Thank you for your choices.');
+    for (var i = 0; i < allProductChoices.length; i++){
+      console.log(allProductChoices[i].numberOfAppearances + ' chances for ' + allProductChoices[i].imageName + '.');
+      console.log(allProductChoices[i].numberOfClicks + ' votes for ' + allProductChoices[i].imageName + '.');
+      console.log(allProductChoices[i].numberOfClicks / allProductChoices[i].numberOfAppearances + '% of votes!');
+    }
   }
 };
 
