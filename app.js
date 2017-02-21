@@ -1,6 +1,6 @@
 'use strict';
 
-var imageInfo = [
+var productInfo = [
   {
     filepath: 'img/banana.jpg',
     name: 'banana'
@@ -81,34 +81,42 @@ var imageInfo = [
     filepath: 'img/wineGlass.jpg',
     name: 'wineGlass'}
 ];
-var allUserChoices = [];
+var allProductChoices = []; //Array for the objects made by constructor
 var randomNumbers = [];
 var lastRandomNumbers = [];
+var counter = 0;
 
-function UserChoice(imageName, imagePath, numberOfAppearances, numberOfClicks){
+var divEl = document.getElementById('pictures');
+console.log(divEl);
+
+//-------------------------------FUNCTIONS------------------------------------//
+function ProductChoice(imageName, imagePath, numberOfAppearances, numberOfClicks){
   this.imageName = imageName;
   this.imagePath = imagePath;
   this.numberOfAppearances = numberOfAppearances;
   this.numberOfClicks = numberOfClicks;
 }
 
-function makeUserChoices(){
-  for(var i = 0; i < imageInfo.length; i++){
-    imageInfo[i] = new UserChoice(imageInfo[i].name, imageInfo[i].filepath, 0, 0);
-    allUserChoices.push(imageInfo[i]);
+//Creating an array to hold all the objects made using the constructor.
+function makeProductChoices(){
+  for(var i = 0; i < productInfo.length; i++){
+    var currentProductChoice = new ProductChoice(productInfo[i].name, productInfo[i].filepath, 0, 0);
+    allProductChoices.push(currentProductChoice);
   }
 };
 
+//Function to create a random number between 0 and 19 to be used for finding random pictures.
 function getRandomNumber(){
-  var ranNumb = Math.floor(Math.random() * imageInfo.length);
+  var ranNumb = Math.floor(Math.random() * productInfo.length);
   return ranNumb;
 };
 
-function pickThreeUserChoices(){
-  lastRandomNumbers = randomNumbers;
-  randomNumbers = [];
+//Function to pull three pictures at random using the random number function.
+function pickThreeProductChoices(){
+  lastRandomNumbers = randomNumbers; //At beginnning, set the 'old' array to the 'new' one
+  randomNumbers = []; //After restting the 'old' array, empty out the 'new' array
   while (randomNumbers.length < 3) {
-    var currentRandomNumb = getRandomNumber();
+    var currentRandomNumb = getRandomNumber(); //Create a random number and name it
     if (randomNumbers.indexOf(currentRandomNumb) === -1 && lastRandomNumbers.indexOf(currentRandomNumb) === -1) {
       randomNumbers.push(currentRandomNumb);
     }
@@ -116,13 +124,25 @@ function pickThreeUserChoices(){
   console.log(randomNumbers);
 }
 
-var listEl = document.getElementById('pictures');
-console.log(listEl);
-pickThreeUserChoices();
-for(var i = 0; i < randomNumbers.length; i++){
-  var imgEl = document.createElement('img');
-  imgEl.setAttribute('src', imageInfo[randomNumbers[i]].filepath);
-  listEl.appendChild(imgEl);
-}
+function addChoicesToElement(){
+  pickThreeProductChoices();
+  for(var i = 0; i < randomNumbers.length; i++){
+    var imgEl = document.createElement('img');
+    imgEl.setAttribute('src', productInfo[randomNumbers[i]].filepath);
+    divEl.appendChild(imgEl);
+    allProductChoices[randomNumbers[i]].numberOfAppearances++;
+  }
+  counter++;
+};
 
-makeUserChoices();
+function eventCall(event){
+  var target = event.target;
+  var targetSrc = target.getAttribute('src');
+  addChoicesToElement();
+};
+
+//--------------------------------FUNCTION CALLS--------------------------------//
+makeProductChoices();
+
+divEl.addEventListener('click', eventCall);
+addChoicesToElement();
