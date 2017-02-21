@@ -100,7 +100,7 @@ function makeUserChoices(){
 };
 
 function getRandomNumber(){
-  var ranNumb = Math.floor(Math.random() * allUserChoices.length);
+  var ranNumb = Math.floor(Math.random() * imageInfo.length);
   return ranNumb;
 };
 
@@ -114,6 +114,15 @@ function pickThreeUserChoices(){
     }
   }
   console.log(randomNumbers);
+}
+
+var listEl = document.getElementById('pictures');
+console.log(listEl);
+pickThreeUserChoices();
+for(var i = 0; i < randomNumbers.length; i++){
+  var imgEl = document.createElement('img');
+  imgEl.setAttribute('src', imageInfo[randomNumbers[i]].filepath);
+  listEl.appendChild(imgEl);
 }
 
 makeUserChoices();
