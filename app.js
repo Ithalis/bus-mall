@@ -125,6 +125,7 @@ function pickThreeProductChoices(){
 }
 
 function addChoicesToElement(){
+  divEl.innerHTML = '';
   pickThreeProductChoices();
   for(var i = 0; i < randomNumbers.length; i++){
     var imgEl = document.createElement('img');
@@ -136,9 +137,21 @@ function addChoicesToElement(){
 };
 
 function eventCall(event){
-  var target = event.target;
-  var targetSrc = target.getAttribute('src');
-  addChoicesToElement();
+  if (counter < 26){
+    var target = event.target;
+    var targetSrc = target.getAttribute('src');
+    for(var i = 0; i < allProductChoices.length; i++){
+      if (allProductChoices[i].imagePath === targetSrc) {
+        allProductChoices[i].numberOfClicks++;
+      } else {
+        break;
+      }
+    }
+    addChoicesToElement();
+  } else {
+    console.log('You\'ve reached 25 choices! You are awesome!');
+
+  }
 };
 
 //--------------------------------FUNCTION CALLS--------------------------------//
