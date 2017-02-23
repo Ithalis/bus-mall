@@ -150,13 +150,13 @@ function eventCall(event){
   } else {
     console.log('You\'ve reached 25 choices! You are awesome!');
     alert('You\'re done! Thank you for your choices.');
+    saveProductsToLocalStorage();
     for (var i = 0; i < allProductChoices.length; i++){
       console.log(allProductChoices[i].numberOfAppearances + ' chances for ' + allProductChoices[i].imageName + '.');
       console.log(allProductChoices[i].numberOfClicks + ' votes for ' + allProductChoices[i].imageName + '.');
       var percentageOfVotes = allProductChoices[i].numberOfClicks / 25;
       console.log(percentageOfVotes + '% of votes!');
       chartData.push(allProductChoices[i].numberOfClicks);
-      drawTable();
     }
   }
 };
@@ -167,30 +167,9 @@ makeProductChoices();
 divEl.addEventListener('click', eventCall);
 addChoicesToElement();
 
-//--------------------------------CHART TIME!----------------------------------//
-var context = document.getElementById('productChoices').getContext('2d');
-function drawTable(){
-  var productChart = new Chart(context, {
-    type: 'bar',
-    data: {
-      labels: ['Banana', 'Bag', 'Bathroom', 'Boots', 'Breakfast', 'Bubblegum', 'Chair', 'Cthulhu', 'Dog Duck', 'Dragon', 'Pen', 'Pet Sweep', 'Scissors', 'Shark', 'Sweep', 'Tauntaun', 'Unicorn', 'USB', 'Water Can', 'Wine Glass'],
-      datasets: [{
-        label: 'Number of votes',
-        data: chartData,
-        backgroundColor: ['rgba(255, 0, 0, 0.8)', 'rgba(255, 50, 0, 0.8)', 'rgba(255, 100, 0, 0.8)', 'rgba(255, 150, 0, 0.8)', 'rgba(255, 200, 0, 0.8)',
-          'rgba(0, 255, 0, 0.8)', 'rgba(0, 255, 50, 0.8)', 'rgba(0, 255, 100, 0.8)', 'rgba(0, 255, 150, 0.8)', 'rgba(0, 255, 200, 0.8)',
-          'rgba(0, 0, 255, 0.8)', 'rgba(50, 0, 255, 0.8)', 'rgba(100, 0, 255, 0.8)', 'rgba(150, 0, 255, 0.8)', 'rgba(200, 0, 255, 0.8)',
-          'rgba(255, 100, 100, 0.8)', 'rgba(100, 255, 100, 0.8)', 'rgba(100, 100, 255, 0.8)', 'rgba(125, 125, 125, 0.8)', 'rgba(40, 100, 140, 0.8)']
-      }]
-    },
-    options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true
-          }
-        }]
-      }
-    }
-  });
-};
+//--------------------------------LOCAL STORAGE TIME!----------------------------------//
+
+function saveProductsToLocalStorage(products){
+  localStorage.allProductChoices = JSON.stringify(allProductChoices);
+  console.log('Saved to local storage!');
+}

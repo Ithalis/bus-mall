@@ -1,25 +1,32 @@
 var allProductChoices = JSON.parse(localStorage.allProductChoices);
-var cumulativeProductChoices = [];
+console.log(allProductChoices);
+var cumulativeProductChoices = JSON.parse(localStorage.cumulativeProductChoices);
+console.log(cumulativeProductChoices);
+var clickDataTotal = [];
 
-function addClicksFromOldToNew(products){
-  if (cumulativeProductChoices.length === 0){
-    cumulativeProductChoices = products;
-  } else {
-    for (var i = 0; i < products.length; i++){
-      cumulativeProductChoices[i].numberOfClicks = cumulativeProductChoices[i].numberOfClicks + products[i].numberOfClicks;
-    }
-  }
+function saveCumulativeToLocalStorage(){
+  localStorage.cumulativeProductChoices = JSON.stringify(cumulativeProductChoices);
+  console.log('Cumulative product choices have been updated in local storage!');
 }
 
-function addAppearancesFromOldToNew(products){
-  if (cumulativeProductChoices.length === 0){
-    cumulativeProductChoices = products;
-  } else {
-    for (var i = 0; i < products.length; i++){
-      cumulativeProductChoices[i].numberOfAppearances = cumulativeProductChoices[i].numberOfAppearances + products[i].numberOfAppearances;
-    }
-  }
+function updateCumulative(products){
+  console.log(cumulativeProductChoices.length);
+  cumulativeProductChoices = products;
+  console.log(cumulativeProductChoices.length);
+  localStorage.cumulativeProductChoices = JSON.stringify(cumulativeProductChoices);
 }
+
+function addToTotals(products){
+
+  for (var i = 0; i < products.length; i++) {
+    cumulativeProductChoices[i].numberOfClicks += products[i].numberOfClicks;
+    clickDataTotal.push(cumulativeProductChoices[i].numberOfClicks);
+  }
+  localStorage.cumulativeProductChoices = JSON.stringify(cumulativeProductChoices);
+  return clickDataTotal;
+}
+
+console.log(cumulativeProductChoices);
 
 function getProductClicks(products){
   var productClicks = [];
@@ -39,11 +46,13 @@ function getProductNames(products){
   return productNames;
 }
 
-addClicksFromOldToNew(allProductChoices);
-addAppearancesFromOldToNew(allProductChoices);
-
-var clickData = getProductClicks(allProductChoices);
+var clickDataNew = getProductClicks(allProductChoices);
 var nameData = getProductNames(allProductChoices);
+if (cumulativeProductChoices.length === 0) {
+  updateCumulative(allProductChoices);
+} else {
+  clickDataTotal = addToTotals(allProductChoices);
+}
 
 var context = document.getElementById('productChoices').getContext('2d');
 function drawTable(){
@@ -52,12 +61,14 @@ function drawTable(){
     data: {
       labels: nameData,
       datasets: [{
-        label: 'Number of votes',
-        data: clickData,
-        backgroundColor: ['rgba(255, 0, 0, 0.8)', 'rgba(255, 50, 0, 0.8)', 'rgba(255, 100, 0, 0.8)', 'rgba(255, 150, 0, 0.8)', 'rgba(255, 200, 0, 0.8)',
-          'rgba(0, 255, 0, 0.8)', 'rgba(0, 255, 50, 0.8)', 'rgba(0, 255, 100, 0.8)', 'rgba(0, 255, 150, 0.8)', 'rgba(0, 255, 200, 0.8)',
-          'rgba(0, 0, 255, 0.8)', 'rgba(50, 0, 255, 0.8)', 'rgba(100, 0, 255, 0.8)', 'rgba(150, 0, 255, 0.8)', 'rgba(200, 0, 255, 0.8)',
-          'rgba(255, 100, 100, 0.8)', 'rgba(100, 255, 100, 0.8)', 'rgba(100, 100, 255, 0.8)', 'rgba(125, 125, 125, 0.8)', 'rgba(40, 100, 140, 0.8)']
+        label: 'Recent number of votes',
+        data: clickDataNew,
+        backgroundColor: 'blue'
+      },
+      {
+        label: 'Recent number of votes',
+        data: clickDataTotal,
+        backgroundColor: 'red'
       }]
     },
     options: {
